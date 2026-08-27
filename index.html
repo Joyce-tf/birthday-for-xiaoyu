@@ -465,29 +465,29 @@ document.addEventListener('DOMContentLoaded', function() {
 const gifts = [
   { age: 0, emoji: '📰', name: '02年9月9日的报纸', desc: '你来到这个世界的那一天\n报纸上写着2002年9月9日' },
   { age: 1, emoji: '🥛', name: '旺仔牛奶', desc: '甜甜的旺仔牛奶\n陪你度过咿呀学语的时光' },
-  { age: 2, emoji: '🎵', name: '会唱歌的音乐盒', desc: '叮叮咚咚\n世界上最好听的声音\n是你的笑声' },
-  { age: 3, emoji: '🧱', name: '积木', desc: '一块一块搭起来\n搭建属于你的小小世界' },
-  { age: 4, emoji: '🧸', name: '毛绒小熊', desc: '第一个好朋友\n陪你度过每一个夜晚' },
-  { age: 5, emoji: '🦸', name: '超人披风', desc: '披上它\n你就是世界上最勇敢的\n小英雄！' },
+  { age: 2, emoji: '💌', name: '会说话的贺卡', desc: '里面录着我想对你说的话\n打开听听吧' },
+  { age: 3, emoji: '🧻', name: '纸巾', desc: '学会自己擦PP了\n成长的一大步！' },
+  { age: 4, emoji: '🩹', name: '创口贴', desc: '摔倒也不怕\n有我在呢' },
+  { age: 5, emoji: '🐰', name: '大白兔奶糖', desc: '甜甜的大白兔\n是童年最甜的记忆' },
   { age: 6, emoji: '🥧', name: 'KFC蛋挞两个', desc: '两个热乎乎的蛋挞\n是童年最甜的奖励' },
   { age: 7, emoji: '🍦', name: '火炬冰柜一箱', desc: '夏天最幸福的事\n就是拥有一整箱冰棍' },
   { age: 8, emoji: '🍟', name: '脆升升一箱', desc: '嘎嘣脆的快乐\n一箱怎么够吃' },
   { age: 9, emoji: '🍧', name: 'DQ兑换券1个', desc: '一张DQ兑换券\n换来一整天的甜蜜' },
   { age: 10, emoji: '🥩', name: '野人先生兑换券1个', desc: '野人先生的烤肉\n是对勇敢小孩的奖赏' },
-  { age: 11, emoji: '🎯', name: '沙包一个', desc: '扔沙包、跳房子\n童年最简单也最快乐' },
-  { age: 12, emoji: '🏸', name: '羽毛球拍/手胶', desc: '挥拍、扣杀\n球场上最帅的少年' },
+  { age: 11, emoji: '🍫', name: '巧克力一盒', desc: '甜甜的巧克力\n融化在嘴里也融化在心里' },
+  { age: 12, emoji: '🏸', name: '手胶', desc: '握紧球拍\n挥出最帅的弧线' },
   { age: 13, emoji: '🍗', name: 'KFC单人餐兑换券一张', desc: '一张KFC兑换券\n就能快乐一整个下午' },
-  { age: 14, emoji: '🗃️', name: '手办展示盒', desc: '开始收集喜欢的动漫手办\n每个都是心头好' },
-  { age: 15, emoji: '🍀', name: '幸运御守', desc: '中考加油！\n好运永远陪伴\n努力的你' },
-  { age: 16, emoji: '📷', name: '拍立得相机', desc: '咔嚓！\n记录下青春里\n每一个闪闪发光的瞬间' },
-  { age: 17, emoji: '🌌', name: '星空投影灯', desc: '在房间里就能看到银河\n许下17岁的愿望' },
+  { age: 14, emoji: '👀', name: '蒸汽眼罩', desc: '学习累了\n让眼睛放松一下' },
+  { age: 15, emoji: '🛋️', name: 'MINISO靠垫', desc: '靠着它\n做最舒服的梦' },
+  { age: 16, emoji: '🏸', name: '羽毛球', desc: '挥洒汗水\n球场上最帅的少年' },
+  { age: 17, emoji: '🧸', name: '抱枕娃娃', desc: '抱着它睡觉\n就像抱着温暖' },
   { age: 18, emoji: '⭐', name: '星星纸', desc: '成年啦！\n叠一颗星星许一个愿\n把未来折进纸里' },
   { age: 19, emoji: '📱', name: '苹果13Pro手机壳', desc: '新手机的新衣服\n保护它就像保护你' },
-  { age: 20, emoji: '⚙️', name: '蒸汽朋克饰品', desc: '遇见小谷\n遇见蒸汽世界\n风格独立又酷炫', badge: '🎮 Steam 特别篇' },
-  { age: 21, emoji: '🎁', name: 'Steam游戏大礼包', desc: '小谷陪你度过\n无数快乐时光\nSteam库里永远有惊喜', badge: '🎮 Steam 特别篇' },
-  { age: 22, emoji: '✈️', name: '旅行手账本', desc: '毕业啦！\n去看更大的世界\n记下每一段旅程' },
-  { age: 23, emoji: '📸', name: '我们俩的相册', desc: '翻开这本相册\n每一页都是我们俩的故事' },
-  { age: 24, emoji: '💺', name: '人体工学椅', desc: '24岁的礼物\n舒舒服服地坐着\n迎接更美好的未来' },
+  { age: 20, emoji: '🔑', name: '大眼仔钥匙扣', desc: '大眼仔陪你\n打开每一扇门' },
+  { age: 21, emoji: '📸', name: '我们俩的相册', desc: '翻开这本相册\n每一页都是我们俩的故事' },
+  { age: 22, emoji: '⛸️', name: '护手霜 + 冰鞋', desc: '护手霜呵护双手\n冰鞋带你滑向远方' },
+  { age: 23, emoji: '💎', name: '非洲之星', desc: '闪耀的非洲之星\n愿你如星辰般璀璨' },
+  { age: 24, emoji: '🚵', name: '山地车黑客500', desc: '骑上黑客500\n去征服每一座山' },
 ];
 
 // ===== Book State =====
@@ -557,10 +557,9 @@ function createPageElement(index, isCover) {
       <div class="page-content">
         <div class="page-left" style="justify-content:center;">
           <div style="text-align:center;color:rgba(74,109,140,0.5);font-family:'Noto Serif SC',serif;">
-            <div style="font-size:3rem;margin-bottom:10px;">🎮</div>
-            <div style="font-size:0.9rem;">Steam玩家</div>
-            <div style="font-size:0.9rem;">动漫爱好者</div>
-            <div style="font-size:0.9rem;">天空蓝</div>
+            <div style="font-size:3rem;margin-bottom:10px;">🎂</div>
+            <div style="font-size:0.9rem;">24岁生日快乐</div>
+            <div style="font-size:0.9rem;">天天开心</div>
           </div>
         </div>
         <div class="page-right" style="justify-content:center;">
