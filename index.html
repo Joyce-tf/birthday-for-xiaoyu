@@ -142,11 +142,12 @@
     width: 100%; height: 100%;
     transform-style: preserve-3d;
     transform-origin: left center;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
     cursor: pointer;
+    will-change: transform;
   }
   .page.flipped {
-    transform: rotateY(-180deg);
+    transform: rotateY(-180deg) translateZ(0);
     pointer-events: none;
   }
   .page-front, .page-back {
@@ -154,17 +155,18 @@
     top: 0; left: 0;
     width: 100%; height: 100%;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     border-radius: 4px 12px 12px 4px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
   .page-front {
     background: var(--paper);
-    z-index: 2;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
   .page-back {
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) translateZ(0);
     background: var(--paper-dark);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
 
   /* ===== Cover Page ===== */
@@ -463,31 +465,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== Gift Data =====
 const gifts = [
-  { age: 0, emoji: '📰', name: '02年9月9日的报纸', desc: '你来到这个世界的那一天\n报纸上写着2002年9月9日' },
-  { age: 1, emoji: '🥛', name: '旺仔牛奶', desc: '甜甜的旺仔牛奶\n陪你度过咿呀学语的时光' },
-  { age: 2, emoji: '💌', name: '会说话的贺卡里面是我说的话', desc: '里面录着我想对你说的话\n打开听听吧' },
-  { age: 3, emoji: '🧻', name: '纸巾学会自己擦pp了', desc: '学会自己擦PP了\n成长的一大步！' },
-  { age: 4, emoji: '🩹', name: '创口贴', desc: '摔倒也不怕\n有我在呢' },
-  { age: 5, emoji: '🐰', name: '大白兔奶糖', desc: '甜甜的大白兔\n是童年最甜的记忆' },
-  { age: 6, emoji: '🥧', name: 'KFC蛋挞两个', desc: '两个热乎乎的蛋挞\n是童年最甜的奖励' },
-  { age: 7, emoji: '🍦', name: '火炬冰柜一箱', desc: '夏天最幸福的事\n就是拥有一整箱冰棍' },
-  { age: 8, emoji: '🍟', name: '脆升升一箱', desc: '嘎嘣脆的快乐\n一箱怎么够吃' },
-  { age: 9, emoji: '🍧', name: 'DQ兑换券1个', desc: '一张DQ兑换券\n换来一整天的甜蜜' },
-  { age: 10, emoji: '🥩', name: '野人先生兑换券1个', desc: '野人先生的烤肉\n是对勇敢小孩的奖赏' },
-  { age: 11, emoji: '🍫', name: '巧克力一盒', desc: '甜甜的巧克力\n融化在嘴里也融化在心里' },
-  { age: 12, emoji: '🏸', name: '手胶', desc: '握紧球拍\n挥出最帅的弧线' },
-  { age: 13, emoji: '🍗', name: 'KFC单人单兑换券一张', desc: '一张KFC兑换券\n就能快乐一整个下午' },
-  { age: 14, emoji: '👀', name: '蒸汽眼罩', desc: '学习累了\n让眼睛放松一下' },
-  { age: 15, emoji: '🛋️', name: 'MINISO靠垫', desc: '靠着它\n做最舒服的梦' },
-  { age: 16, emoji: '🏸', name: '羽毛球', desc: '挥洒汗水\n球场上最帅的少年' },
-  { age: 17, emoji: '🧸', name: '抱枕娃娃', desc: '抱着它睡觉\n就像抱着温暖' },
-  { age: 18, emoji: '⭐', name: '星星纸', desc: '成年啦！\n叠一颗星星许一个愿\n把未来折进纸里' },
-  { age: 19, emoji: '📱', name: '苹果13Pro手机壳', desc: '新手机的新衣服\n保护它就像保护你' },
-  { age: 20, emoji: '🔑', name: '大眼仔钥匙扣', desc: '大眼仔陪你\n打开每一扇门' },
-  { age: 21, emoji: '📸', name: '我们俩的相册', desc: '翻开这本相册\n每一页都是我们俩的故事' },
-  { age: 22, emoji: '⛸️', name: '护手霜捡冰鞋', desc: '护手霜呵护双手\n冰鞋带你滑向远方' },
-  { age: 23, emoji: '💎', name: '非洲之星', desc: '闪耀的非洲之星\n愿你如星辰般璀璨' },
-  { age: 24, emoji: '🚵', name: '山地车黑客500', desc: '骑上黑客500\n去征服每一座山' },
+  { age: 0, emoji: '📰', name: '02年9月9日的报纸', desc: '2002年9月9日\n世界从此多了一个你' },
+  { age: 1, emoji: '🥛', name: '旺仔牛奶', desc: '第一口甜甜的奶香\n是第一声咿呀学语的味道' },
+  { age: 2, emoji: '💌', name: '会说话的贺卡里面是我说的话', desc: '稚嫩的声音录进卡片里\n想对你说的话都在里面' },
+  { age: 3, emoji: '🧻', name: '纸巾学会自己擦pp了', desc: '从今天起\n自己的事情自己做' },
+  { age: 4, emoji: '🩹', name: '创口贴', desc: '跌跌撞撞的童年\n有创口贴帮你愈合' },
+  { age: 5, emoji: '🐰', name: '大白兔奶糖', desc: '剥开蓝白相间的糖纸\n甜了一整个童年' },
+  { age: 6, emoji: '🥧', name: 'KFC蛋挞两个', desc: '热乎乎的蛋挞捧在手心\n是考了满分才有的奖励' },
+  { age: 7, emoji: '🍦', name: '火炬冰柜一箱', desc: '夏天最大的幸福\n是打开冰箱满满一箱冰棍' },
+  { age: 8, emoji: '🍟', name: '脆升升一箱', desc: '咔嚓咔嚓的声音\n是童年最快乐的BGM' },
+  { age: 9, emoji: '🍧', name: 'DQ兑换券1个', desc: '倒杯不洒的暴风雪\n倒不出的是满嘴的甜' },
+  { age: 10, emoji: '🥩', name: '野人先生兑换券1个', desc: '滋滋作响的烤肉\n是对勇敢小孩最好的犒赏' },
+  { age: 11, emoji: '🍫', name: '巧克力一盒', desc: '含在嘴里慢慢融化\n一直甜到心里去' },
+  { age: 12, emoji: '🏸', name: '手胶', desc: '一圈一圈缠上去\n是握在手心里的温度' },
+  { age: 13, emoji: '🍗', name: 'KFC单人单兑换券一张', desc: '一个人的炸鸡套餐\n独属于你的快乐时光' },
+  { age: 14, emoji: '👀', name: '蒸汽眼罩', desc: '温热的水汽敷在眼上\n把疲惫都蒸发了' },
+  { age: 15, emoji: '🛋️', name: 'MINISO靠垫', desc: '靠上去的那一刻\n整个世界都柔软了' },
+  { age: 16, emoji: '🏸', name: '羽毛球', desc: '每一记扣杀\n都是青春最帅的弧线' },
+  { age: 17, emoji: '🧸', name: '抱枕娃娃', desc: '代替我\n在每个夜晚拥抱你' },
+  { age: 18, emoji: '⭐', name: '星星纸', desc: '十八岁叠的第一颗星星\n折进了所有关于未来的愿望' },
+  { age: 19, emoji: '📱', name: '苹果13Pro手机壳', desc: '给手机穿上新衣服\n就像我想好好保护你' },
+  { age: 20, emoji: '🔑', name: '大眼仔钥匙扣', desc: '大眼仔睁着圆圆的眼\n替我守护你的每一扇门' },
+  { age: 21, emoji: '📸', name: '我们俩的相册', desc: '翻开每一页\n都是我们在一起的证据' },
+  { age: 22, emoji: '⛸️', name: '护手霜捡冰鞋', desc: '护手霜温柔了双手\n冰鞋带你滑向自由' },
+  { age: 23, emoji: '💎', name: '非洲之星', desc: '愿这颗璀璨的星辰\n照亮你走过的每一条路' },
+  { age: 24, emoji: '🚵', name: '山地车黑客500', desc: '跨上黑客500\n山野万里都是你的征途' },
 ];
 
 // ===== Book State =====
@@ -632,7 +634,7 @@ function updateNav() {
   
   // Update page z-indices and flip states
   const pages = document.querySelectorAll('.page');
-  pages.forEach((page, i) => {
+  pages.forEach((page) => {
     const pageIndex = page.dataset.index;
     if (pageIndex === 'cover') {
       page.style.zIndex = totalPages - 0;
@@ -645,20 +647,67 @@ function updateNav() {
   });
 }
 
+let isAnimating = false;
+
 function nextPage() {
-  if (currentPage < totalPages - 1) {
+  if (currentPage < totalPages - 1 && !isAnimating) {
+    isAnimating = true;
+    
+    // Boost z-index of the page being flipped so it stays on top during animation
+    const pages = document.querySelectorAll('.page');
+    const flippingPage = pages[currentPage];
+    if (flippingPage) {
+      flippingPage.style.zIndex = totalPages + 10;
+    }
+    
     currentPage++;
     updateNav();
+    
     if (currentPage === totalPages - 1) {
       launchConfetti();
+    }
+    
+    // Reset the boosted z-index after animation
+    if (flippingPage) {
+      setTimeout(() => {
+        const pageIndex = flippingPage.dataset.index;
+        if (pageIndex === 'cover') {
+          flippingPage.style.zIndex = totalPages - 0;
+        } else {
+          flippingPage.style.zIndex = totalPages - (parseInt(pageIndex) + 1);
+        }
+        isAnimating = false;
+      }, 500);
+    } else {
+      isAnimating = false;
     }
   }
 }
 
 function prevPage() {
-  if (currentPage > 0) {
+  if (currentPage > 0 && !isAnimating) {
+    isAnimating = true;
+    
     currentPage--;
     updateNav();
+    
+    // The page being revealed (unflipped) should get a brief boost
+    const pages = document.querySelectorAll('.page');
+    const revealedPage = pages[currentPage];
+    if (revealedPage) {
+      revealedPage.style.zIndex = totalPages + 10;
+      setTimeout(() => {
+        const pageIndex = revealedPage.dataset.index;
+        if (pageIndex === 'cover') {
+          revealedPage.style.zIndex = totalPages - 0;
+        } else {
+          revealedPage.style.zIndex = totalPages - (parseInt(pageIndex) + 1);
+        }
+        isAnimating = false;
+      }, 500);
+    } else {
+      isAnimating = false;
+    }
   }
 }
 
