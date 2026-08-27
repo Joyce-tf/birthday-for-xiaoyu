@@ -40,25 +40,20 @@
   .cloud {
     position: absolute; background: rgba(255,255,255,0.6); border-radius: 50%;
     animation: floatCloud linear infinite;
+    will-change: transform;
   }
   .cloud::before, .cloud::after {
     content: ''; position: absolute; background: rgba(255,255,255,0.6); border-radius: 50%;
   }
-  .cloud:nth-child(1) { width: 140px; height: 55px; top: 3%; animation-duration: 28s; }
+  .cloud:nth-child(1) { width: 140px; height: 55px; top: 3%; animation-duration: 40s; }
   .cloud:nth-child(1)::before { width: 70px; height: 70px; top: -35px; left: 25px; }
   .cloud:nth-child(1)::after { width: 90px; height: 55px; top: -22px; left: 55px; }
-  .cloud:nth-child(2) { width: 180px; height: 65px; top: 12%; animation-duration: 35s; animation-delay: 6s; }
-  .cloud:nth-child(2)::before { width: 85px; height: 85px; top: -42px; left: 30px; }
-  .cloud:nth-child(2)::after { width: 110px; height: 65px; top: -28px; left: 70px; }
-  .cloud:nth-child(3) { width: 120px; height: 45px; top: 22%; animation-duration: 24s; animation-delay: 12s; }
+  .cloud:nth-child(2) { width: 160px; height: 60px; top: 12%; animation-duration: 50s; animation-delay: 10s; }
+  .cloud:nth-child(2)::before { width: 80px; height: 80px; top: -40px; left: 30px; }
+  .cloud:nth-child(2)::after { width: 100px; height: 60px; top: -25px; left: 65px; }
+  .cloud:nth-child(3) { width: 120px; height: 45px; top: 20%; animation-duration: 45s; animation-delay: 20s; }
   .cloud:nth-child(3)::before { width: 60px; height: 60px; top: -30px; left: 20px; }
   .cloud:nth-child(3)::after { width: 75px; height: 45px; top: -18px; left: 48px; }
-  .cloud:nth-child(4) { width: 160px; height: 60px; top: 6%; animation-duration: 32s; animation-delay: 3s; }
-  .cloud:nth-child(4)::before { width: 80px; height: 80px; top: -40px; left: 28px; }
-  .cloud:nth-child(4)::after { width: 100px; height: 60px; top: -25px; left: 65px; }
-  .cloud:nth-child(5) { width: 100px; height: 40px; top: 18%; animation-duration: 26s; animation-delay: 9s; }
-  .cloud:nth-child(5)::before { width: 50px; height: 50px; top: -25px; left: 18px; }
-  .cloud:nth-child(5)::after { width: 65px; height: 40px; top: -15px; left: 42px; }
   @keyframes floatCloud {
     from { transform: translateX(-300px); }
     to { transform: translateX(calc(100vw + 300px)); }
@@ -142,13 +137,19 @@
     width: 100%; height: 100%;
     transform-style: preserve-3d;
     transform-origin: left center;
-    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition: transform 0.45s ease-out;
     cursor: pointer;
+    contain: layout style;
+  }
+  .page.flipping {
     will-change: transform;
   }
   .page.flipped {
     transform: rotateY(-180deg) translateZ(0);
     pointer-events: none;
+  }
+  .page.hidden-behind {
+    visibility: hidden;
   }
   .page-front, .page-back {
     position: absolute;
@@ -387,16 +388,13 @@
 <!-- Floating Clouds -->
 <div class="clouds">
   <div class="cloud"></div><div class="cloud"></div><div class="cloud"></div>
-  <div class="cloud"></div><div class="cloud"></div>
 </div>
 
 <!-- Floating Decorations -->
 <div class="floating-decor" style="top:6%;left:5%;">⭐</div>
 <div class="floating-decor" style="top:15%;right:8%;animation-delay:0.5s;">💕</div>
-<div class="floating-decor" style="top:35%;left:3%;animation-delay:1s;">✨</div>
-<div class="floating-decor" style="top:55%;right:5%;animation-delay:0.3s;">🌟</div>
-<div class="floating-decor" style="top:75%;left:7%;animation-delay:1.5s;">💖</div>
-<div class="floating-decor" style="top:85%;right:10%;animation-delay:0.8s;">💫</div>
+<div class="floating-decor" style="top:55%;right:5%;animation-delay:1s;">✨</div>
+<div class="floating-decor" style="top:85%;left:7%;animation-delay:1.5s;">💖</div>
 
 <!-- Confetti -->
 <div class="confetti-container" id="confetti"></div>
@@ -632,32 +630,47 @@ function updateNav() {
     indicator.textContent = `${gift.age}岁 · ${gift.name}`;
   }
   
-  // Update page z-indices and flip states
+  // Update page z-indices, flip states, and visibility
   const pages = document.querySelectorAll('.page');
   pages.forEach((page) => {
     const pageIndex = page.dataset.index;
     if (pageIndex === 'cover') {
       page.style.zIndex = totalPages - 0;
       page.classList.toggle('flipped', currentPage > 0);
+      // Hide cover if it's more than 2 pages behind
+      page.classList.toggle('hidden-behind', currentPage > 2);
     } else {
       const idx = parseInt(pageIndex);
       page.style.zIndex = totalPages - (idx + 1);
       page.classList.toggle('flipped', currentPage > idx + 1);
+      // Hide pages that are more than 2 pages behind or ahead
+      const ageIdx = idx + 1; // page index in book (cover=0, age0=1, age1=2...)
+      page.classList.toggle('hidden-behind', ageIdx < currentPage - 2 || ageIdx > currentPage + 2);
     }
   });
 }
 
 let isAnimating = false;
+let flippingCleanup = null;
+
+function cleanupFlipping() {
+  if (flippingCleanup) {
+    flippingCleanup.classList.remove('flipping');
+    flippingCleanup = null;
+  }
+  isAnimating = false;
+}
 
 function nextPage() {
   if (currentPage < totalPages - 1 && !isAnimating) {
     isAnimating = true;
     
-    // Boost z-index of the page being flipped so it stays on top during animation
     const pages = document.querySelectorAll('.page');
     const flippingPage = pages[currentPage];
     if (flippingPage) {
       flippingPage.style.zIndex = totalPages + 10;
+      flippingPage.classList.add('flipping');
+      flippingCleanup = flippingPage;
     }
     
     currentPage++;
@@ -667,16 +680,29 @@ function nextPage() {
       launchConfetti();
     }
     
-    // Reset the boosted z-index after animation
+    // Reset after animation
     if (flippingPage) {
-      setTimeout(() => {
+      flippingPage.addEventListener('transitionend', function handler() {
+        flippingPage.removeEventListener('transitionend', handler);
         const pageIndex = flippingPage.dataset.index;
         if (pageIndex === 'cover') {
           flippingPage.style.zIndex = totalPages - 0;
         } else {
           flippingPage.style.zIndex = totalPages - (parseInt(pageIndex) + 1);
         }
-        isAnimating = false;
+        cleanupFlipping();
+      });
+      // Fallback timeout
+      setTimeout(() => {
+        if (flippingCleanup === flippingPage) {
+          const pageIndex = flippingPage.dataset.index;
+          if (pageIndex === 'cover') {
+            flippingPage.style.zIndex = totalPages - 0;
+          } else {
+            flippingPage.style.zIndex = totalPages - (parseInt(pageIndex) + 1);
+          }
+          cleanupFlipping();
+        }
       }, 500);
     } else {
       isAnimating = false;
@@ -691,19 +717,33 @@ function prevPage() {
     currentPage--;
     updateNav();
     
-    // The page being revealed (unflipped) should get a brief boost
     const pages = document.querySelectorAll('.page');
     const revealedPage = pages[currentPage];
     if (revealedPage) {
       revealedPage.style.zIndex = totalPages + 10;
-      setTimeout(() => {
+      revealedPage.classList.add('flipping');
+      flippingCleanup = revealedPage;
+      
+      revealedPage.addEventListener('transitionend', function handler() {
+        revealedPage.removeEventListener('transitionend', handler);
         const pageIndex = revealedPage.dataset.index;
         if (pageIndex === 'cover') {
           revealedPage.style.zIndex = totalPages - 0;
         } else {
           revealedPage.style.zIndex = totalPages - (parseInt(pageIndex) + 1);
         }
-        isAnimating = false;
+        cleanupFlipping();
+      });
+      setTimeout(() => {
+        if (flippingCleanup === revealedPage) {
+          const pageIndex = revealedPage.dataset.index;
+          if (pageIndex === 'cover') {
+            revealedPage.style.zIndex = totalPages - 0;
+          } else {
+            revealedPage.style.zIndex = totalPages - (parseInt(pageIndex) + 1);
+          }
+          cleanupFlipping();
+        }
       }, 500);
     } else {
       isAnimating = false;
